@@ -75,6 +75,50 @@ and `sid` (Structural Intervention Distance, `cdt.metrics.SID(target=truth, pred
 - `configs/<method>.yaml`: hyper-parameters. `default` applies to every dataset, `datasets.<name>` overrides
   it for one dataset (only NOTEARS uses per-dataset settings).
 
+## Using your own data
+
+1. Put a CSV file in `data/`, one row per sample and one column per variable, with a header row of unique
+   column names. The columns used for causal discovery must be numeric with no missing values; any other
+   columns (ids, image paths, ...) can stay in the file and are ignored.
+
+   ```
+   id,x1,x2,y,img_path
+   0,0.53,1.20,2.71,0.png
+   1,-0.12,0.88,1.05,1.png
+   ...
+   ```
+
+2. Add an entry to `configs/datasets.yaml`:
+
+   ```yaml
+   my_dataset:              # the name passed to --datasets
+     file: my_data.csv      # file in data/
+     columns: [x1, x2, y]   # variables to use, in this order
+     graph:                 # ground truth over `columns`: graph[i][j] = 1 means columns[i] -> columns[j]
+       - [0, 0, 1]          # x1 -> y
+       - [0, 0, 1]          # x2 -> y
+       - [0, 0, 0]
+   ```
+
+   `graph` must be a square 0/1 matrix of size `len(columns)`, and acyclic (SID is only defined for DAGs).
+   At least 2 variables are needed.
+
+3. Run any method on it:
+
+   ```bash
+   python run.py --method notears --datasets my_dataset
+   ```
+
+New datasets use the `default` block of `configs/<method>.yaml`. To tune a method for one dataset, add an
+override under `datasets:` in that file, e.g. in `configs/notears.yaml`:
+
+```yaml
+datasets:
+  my_dataset: {model: linear, lambda1: 0.1}
+```
+
+SCORE's memory grows with n² (about 20 GB for n = 15000, d = 3), so subsample very large datasets for it.
+
 ## Runtime
 
 All 19 datasets, measured with the 7 methods running at the same time on 20 CPU cores + one RTX 4090:
@@ -84,43 +128,6 @@ All 19 datasets, measured with the 7 methods running at the same time on 20 CPU 
 | 3 min | < 1 min| 50 min  | 40 min   | 13 min  | 40 min       | 40 min |
 
 SCORE builds n x n kernel matrices on the CPU and needs ~20 GB of RAM on the 15000-sample datasets.
-
-## Reproducibility
-
-Within this environment re-running a method gives identical results (seeds are fixed in the configs and
-`run.py` fixes `PYTHONHASHSEED`; checked by re-running a subset of datasets). Compared with the predictions
-of the original notebooks / result files:
-
-| Method   | Same predicted graph | Why the others differ |
-|----------|----------------------|-----------------------|
-| DAG-GNN  | 19 / 19 | |
-| SCORE    | 19 / 19 | |
-| NOTEARS  | 18 / 19 | magnet: the original used an older `magnet.csv` (reproduced exactly with that file) |
-| CAM      | 17 / 19 (metrics) | reflection, hypothetical_4_linear: sensitive to the R package versions (mgcv / mboost / glmnet) |
-| PC       | 10 / 19 (19 / 19 same skeleton) | pgmpy orients the undirected edges of the CPDAG arbitrarily |
-| GraN-DAG | 11 / 19 | the original ran in the authors' Singularity container (older PyTorch) |
-| DiffAN   | 13 / 38 (both variants) | GPU training; the original numbers come from a different run |
-
-## Differences from the original notebooks
-
-This repository replaces the per-method notebooks (`*/demo.ipynb`). Algorithms and hyper-parameters are
-unchanged; the following was changed or fixed on purpose:
-
-- **SID argument order.** The notebooks called `SID(prediction, truth)`, but cdt's signature is
-  `SID(target, pred)`. SID is not symmetric; here it is `SID(truth, prediction)`. With the original
-  predictions this changes the SID value on roughly two thirds of the datasets for every method.
-- **DiffAN variants.** The notebook ran both DiffAN variants (with deciduous residue / masking only) and,
-  for each dataset, recorded the one with the lower SHD. Both are reported here as separate rows.
-- **Data.** `data/` holds the version of each CSV shared by the original method folders. The NOTEARS
-  folder had an older `magnet.csv` with one extra row (`iter` 9170).
-- **PC orientation.** pgmpy orients the undirected edges of the CPDAG arbitrarily, and the choice depended on
-  Python's per-process string hashing. `run.py` fixes `PYTHONHASHSEED=0`, so results are reproducible, but
-  those arbitrary orientations need not match the original run.
-- **Portability fixes** (no effect on results): SCORE's hard-coded paths and temp files written to the
-  working directory, R scripts that only worked from a specific working directory, `functorch` replaced
-  by `torch.func`, removed `np.float`, an invalid `savefig(padding=0)` argument in GraN-DAG, DAG-GNN's
-  data loading that was switched by commenting code in and out. GraN-DAG runs natively instead of in the
-  authors' Singularity container.
 
 ## Layout
 

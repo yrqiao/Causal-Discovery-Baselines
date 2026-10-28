@@ -3,6 +3,9 @@
 #   model: nonlinear -> notears_nonlinear(NotearsMLP(dims=[d, hidden, 1]), X, lambda1, lambda2)
 default:
   seed: 1
+  model: nonlinear     # used by datasets without an entry below
+  lambda1: 0.01
+  lambda2: 0.005       # nonlinear only
   loss_type: l2        # linear only
   hidden: 10           # nonlinear only
   max_iter: 100
