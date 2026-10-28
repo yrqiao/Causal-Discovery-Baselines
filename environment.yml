@@ -1,0 +1,72 @@
+# Shared environment for all methods: CAM, PC, DAG-GNN, GraN-DAG, NOTEARS, DiffAN, SCORE.
+#
+#   bash scripts/setup_env.sh          # creates the env, installs the remaining R packages, runs checks
+#
+# R is needed by CAM (cdt -> R package CAM), by the CAM pruning step of SCORE / DiffAN,
+# and by the SID metric (cdt -> R package SID). R packages that are not on conda
+# (mboost, pcalg, SID, CAM) are installed by scripts/install_r_packages.R.
+name: causal_baselines
+channels:
+  - conda-forge
+  - bioconda
+  - pytorch
+  - nvidia
+  - nodefaults
+dependencies:
+  - python=3.11
+  - pip
+
+  # ---- PyTorch ----
+  # The official conda build, not the PyPI wheel: nonlinear NOTEARS (float32 + L-BFGS-B) only reproduces
+  # the original results bit-for-bit with this exact build.
+  - pytorch::pytorch=2.2.2=py3.11_cuda12.1_cudnn8.9.2_0
+  - pytorch::pytorch-cuda=12.1
+  - mkl<2024.1               # pytorch-channel builds fail to import with mkl>=2024.1
+
+  # ---- R ----
+  - r-base=4.4
+  - r-recommended            # Matrix, mgcv, MASS, lattice, survival, ...
+  - r-glmnet                 # CAM
+  - r-partykit               # mboost
+  - r-stabs                  # mboost
+  - r-nnls                   # mboost
+  - r-quadprog               # mboost
+  - r-mvtnorm
+  - r-igraph                 # SID, pcalg
+  - r-rcpp                   # pcalg
+  - r-rcpparmadillo          # pcalg
+  - r-bh                     # pcalg
+  - r-robustbase             # pcalg
+  - r-vcd                    # pcalg
+  - r-ggm                    # pcalg
+  - r-corpcor                # pcalg
+  - r-fastica                # pcalg
+  - r-clue                   # pcalg
+  - r-sfsmisc                # pcalg
+  - r-abind                  # pcalg
+  - r-bdsmatrix              # pcalg
+  - bioconductor-graph       # pcalg, SID
+  - bioconductor-rbgl        # pcalg, SID
+
+  # toolchain for building the remaining R packages from source
+  - c-compiler
+  - cxx-compiler
+  - fortran-compiler
+  - make
+
+  # ---- Python ----
+  - pip:
+      - numpy==1.26.4          # torch 2.2 is built against numpy 1.x
+      - fsspec                 # torch dependency missing from the conda package
+      - scipy==1.11.4
+      - pandas==2.2.3
+      - scikit-learn==1.2.2
+      - networkx==3.1
+      - statsmodels==0.14.4
+      - matplotlib==3.8.4
+      - seaborn==0.12.2        # GraN-DAG plotting
+      - python-igraph==0.11.8  # NOTEARS / SCORE graph utilities
+      - tqdm
+      - pyyaml
+      - cdt==0.6.0             # CAM wrapper, SID metric, R launcher used by SCORE / DiffAN
+      - pgmpy==0.1.26          # PC

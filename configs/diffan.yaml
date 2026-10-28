@@ -1,0 +1,9 @@
+# DiffAN. Same settings for every dataset (original DiffAN/demo.ipynb).
+# Both variants are run one after the other with a single seeding, exactly like the notebook,
+# and are reported as separate rows (variant = residue / masking).
+default:
+  seed: 1
+  variants: [residue, masking]
+  epochs: 3000           # DiffAN defaults; early-stops once the validation loss has not improved for 300 epochs
+  batch_size: 1024
+  learning_rate: 0.001

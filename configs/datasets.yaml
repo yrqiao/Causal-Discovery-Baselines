@@ -1,0 +1,168 @@
+# The 19 datasets used in all experiments.
+#   file    : CSV in data/
+#   columns : variables used for causal discovery, in this order
+#   graph   : ground-truth adjacency over `columns`; graph[i][j] = 1 means columns[i] -> columns[j]
+
+convex_lens:
+  file: convex_lens.csv
+  columns: ["Dist_object", "Dist_img_noise", "magnification_noise"]
+  graph:
+    - [0, 1, 1]
+    - [0, 0, 1]
+    - [0, 0, 0]
+
+pendulum:
+  file: pendulum.csv
+  columns: ["x_l", "l", "theta", "length_noise", "position_noise"]
+  graph:
+    - [0, 0, 0, 1, 1]
+    - [0, 0, 0, 1, 1]
+    - [0, 0, 0, 1, 1]
+    - [0, 0, 0, 0, 0]
+    - [0, 0, 0, 0, 0]
+
+magnet:
+  file: magnet.csv
+  columns: ["magnet_direction(degree)", "needle_location_x", "needle_location_y", "direction_noise"]
+  graph:
+    - [0, 0, 0, 1]
+    - [0, 0, 0, 1]
+    - [0, 0, 0, 1]
+    - [0, 0, 0, 0]
+
+seesaw:
+  file: seesaw.csv
+  columns: ["left", "right", "res_noise"]
+  graph:
+    - [0, 0, 1]
+    - [0, 0, 1]
+    - [0, 0, 0]
+
+spring:
+  file: spring.csv
+  columns: ["weight", "spring_constant", "deformation_noise"]
+  graph:
+    - [0, 0, 1]
+    - [0, 0, 1]
+    - [0, 0, 0]
+
+reflection:
+  file: reflection.csv
+  columns: ["incident_vector", "reflection_noise"]
+  graph:
+    - [0, 1]
+    - [0, 0]
+
+parabola:
+  file: parabola.csv
+  columns: ["deformation", "angle", "H_noise", "L_noise"]
+  graph:
+    - [0, 0, 1, 1]
+    - [0, 0, 1, 1]
+    - [0, 0, 0, 0]
+    - [0, 0, 0, 0]
+
+hypothetical_2_linear:
+  file: hypothetical_2_linear.csv
+  columns: ["volume_ball", "volume_cube_noise"]
+  graph:
+    - [0, 1]
+    - [0, 0]
+
+hypothetical_2_nonlinear:
+  file: hypothetical_2_nonlinear.csv
+  columns: ["scaled_volume_ball", "volume_cube_noise"]
+  graph:
+    - [0, 1]
+    - [0, 0]
+
+hypothetical_3_linear:
+  file: hypothetical_3_linear.csv
+  columns: ["volume_ball", "height_noise", "cone_noise"]
+  graph:
+    - [0, 1, 1]
+    - [0, 0, 1]
+    - [0, 0, 0]
+
+hypothetical_3_v_linear:
+  file: hypothetical_3_v_linear.csv
+  columns: ["volume_ball", "height_cylinder", "cone_noise"]
+  graph:
+    - [0, 0, 1]
+    - [0, 0, 1]
+    - [0, 0, 0]
+
+hypothetical_3_v_nonlinear:
+  file: hypothetical_3_v_nonlinear.csv
+  columns: ["scaled_volume_ball", "height_cylinder", "cone_noise"]
+  graph:
+    - [0, 0, 1]
+    - [0, 0, 1]
+    - [0, 0, 0]
+
+hypothetical_4_linear:
+  file: hypothetical_4_linear.csv
+  columns: ["volume_ball", "height_noise", "base_area_noise", "base_area_cone"]
+  graph:
+    - [0, 1, 1, 0]
+    - [0, 0, 1, 0]
+    - [0, 0, 0, 0]
+    - [1, 0, 1, 0]
+
+hypothetical_4_v_linear:
+  file: hypothetical_4_v_linear.csv
+  columns: ["volumn_ball", "height_cuboid", "cuboid_noise", "cone_noise"]
+  graph:
+    - [0, 0, 1, 0]
+    - [0, 0, 1, 0]
+    - [0, 0, 0, 1]
+    - [0, 0, 0, 0]
+
+hypothetical_4_v_nonlinear:
+  file: hypothetical_4_v_nonlinear.csv
+  columns: ["scaled_volumn_ball", "height_cuboid", "cuboid_noise", "cone_noise"]
+  graph:
+    - [0, 0, 1, 0]
+    - [0, 0, 1, 0]
+    - [0, 0, 0, 1]
+    - [0, 0, 0, 0]
+
+hypothetical_5_linear:
+  file: hypothetical_5_linear.csv
+  columns: ["volumn_ball", "height_cuboid_noise", "base_cuboid_noise", "base_cone_noise", "height_cone_noise"]
+  graph:
+    - [0, 1, 1, 0, 1]
+    - [0, 0, 1, 0, 0]
+    - [0, 0, 0, 1, 1]
+    - [0, 0, 0, 0, 1]
+    - [0, 0, 0, 0, 0]
+
+hypothetical_5_v_linear:
+  file: hypothetical_5_v_linear.csv
+  columns: ["volumn_ball", "height_cuboid_noise", "base_cuboid_noise", "base_area_cone", "height_cone_noise"]
+  graph:
+    - [0, 0, 1, 0, 0]
+    - [0, 0, 1, 0, 0]
+    - [0, 0, 0, 0, 1]
+    - [0, 1, 0, 0, 1]
+    - [0, 0, 0, 0, 0]
+
+hypothetical_5_v_nonlinear:
+  file: hypothetical_5_v_nonlinear.csv
+  columns: ["scaled_volumn_ball", "height_cuboid_noise", "base_cuboid_noise", "scaled_base_area_cone", "height_cone_noise"]
+  graph:
+    - [0, 0, 1, 0, 0]
+    - [0, 0, 1, 0, 0]
+    - [0, 0, 0, 0, 1]
+    - [0, 1, 0, 0, 1]
+    - [0, 0, 0, 0, 0]
+
+waterflow:
+  file: waterflow.csv
+  columns: ["Ball Volume", "Diameter of the bottom", "height_noise", "Hole height", "length_noise"]
+  graph:
+    - [0, 0, 1, 0, 0]
+    - [0, 0, 1, 0, 0]
+    - [0, 0, 0, 0, 1]
+    - [0, 0, 0, 0, 1]
+    - [0, 0, 0, 0, 0]

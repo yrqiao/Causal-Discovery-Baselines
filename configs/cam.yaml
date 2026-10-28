@@ -1,0 +1,10 @@
+# CAM via cdt.causality.graph.CAM (the notebook used CAM() with its defaults)
+default:
+  score: nonlinear
+  cutoff: 0.001
+  variablesel: true
+  selmethod: gamboost
+  pruning: false
+  prunmethod: gam
+  njobs: null        # null -> cdt default (all CPUs)
+  verbose: false

@@ -1,0 +1,10 @@
+# SCORE. Same hyper-parameters for every dataset (original SCORE/demo.ipynb).
+# Note: Stein_hess builds [n, n, d] kernel tensors on CPU, so a 15000-sample dataset needs ~20 GB of RAM.
+default:
+  eta_G: 0.001
+  eta_H: 0.001
+  cam_cutoff: 0.001
+  normalize_var: false   # SCORE() defaults
+  dispersion: var
+  pruning: CAM           # CAM | Stein
+  threshold: 0.1         # Stein pruning only

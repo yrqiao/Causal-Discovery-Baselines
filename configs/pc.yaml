@@ -1,0 +1,7 @@
+# PC via pgmpy.estimators.PC (pgmpy 0.1.26)
+default:
+  ci_test: pearsonr
+  significance_level: 0.01
+  return_type: dag          # undirected edges of the CPDAG are oriented by pgmpy
+  variant: stable           # pgmpy default
+  max_cond_vars: 5          # pgmpy default

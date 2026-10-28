@@ -1,0 +1,32 @@
+# NOTEARS. Per-dataset settings are the ones used in the original notears/demo.ipynb.
+#   model: linear    -> notears_linear(X, lambda1, loss_type)
+#   model: nonlinear -> notears_nonlinear(NotearsMLP(dims=[d, hidden, 1]), X, lambda1, lambda2)
+default:
+  seed: 1
+  loss_type: l2        # linear only
+  hidden: 10           # nonlinear only
+  max_iter: 100
+  h_tol: 1.0e-8
+  rho_max: 1.0e+16
+  w_threshold: 0.3
+
+datasets:
+  convex_lens:                {model: nonlinear, lambda1: 0.001, lambda2: 0.0005}
+  pendulum:                   {model: nonlinear, lambda1: 0.01,  lambda2: 0.005}
+  magnet:                     {model: nonlinear, lambda1: 0.01,  lambda2: 0.005, seed: 0}
+  seesaw:                     {model: linear,    lambda1: 0.01}
+  spring:                     {model: linear,    lambda1: 0.01}
+  reflection:                 {model: linear,    lambda1: 0.01}
+  parabola:                   {model: nonlinear, lambda1: 0.1,   lambda2: 0.05}
+  hypothetical_2_linear:      {model: linear,    lambda1: 0.01}
+  hypothetical_2_nonlinear:   {model: nonlinear, lambda1: 0.01,  lambda2: 0.005}
+  hypothetical_3_linear:      {model: linear,    lambda1: 0.01}
+  hypothetical_3_v_linear:    {model: linear,    lambda1: 0.1}
+  hypothetical_3_v_nonlinear: {model: nonlinear, lambda1: 0.1,   lambda2: 0.05}
+  hypothetical_4_linear:      {model: linear,    lambda1: 0.1}
+  hypothetical_4_v_linear:    {model: linear,    lambda1: 0.1}
+  hypothetical_4_v_nonlinear: {model: nonlinear, lambda1: 0.1,   lambda2: 0.05}
+  hypothetical_5_linear:      {model: linear,    lambda1: 0.01}
+  hypothetical_5_v_linear:    {model: linear,    lambda1: 0.01}
+  hypothetical_5_v_nonlinear: {model: nonlinear, lambda1: 0.01,  lambda2: 0.005}
+  waterflow:                  {model: nonlinear, lambda1: 0.001, lambda2: 0.0005}
